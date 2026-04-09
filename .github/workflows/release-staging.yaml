@@ -20,7 +20,7 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-    - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
     - name: Validate tracker URL
       run: |
@@ -38,7 +38,7 @@ jobs:
       run: ./.github/scripts/validate-semver.sh v${{ env.VERSION }}
 
     - name: Create release branch
-      uses: peterjgrainger/action-create-branch@10c7d268152480ae859347db45dc69086cef1d9c # v3.0.0
+      uses: peterjgrainger/action-create-branch@4b81ce657e255acd677cc6c55c9c763654be3aef # v4.0.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -66,7 +66,7 @@ jobs:
       run: ./.github/scripts/apply-operator-images.sh
 
     - name: Setup Go
-      uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
+      uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.4.0
       with:
         go-version-file: go.mod
         cache: false
@@ -96,7 +96,7 @@ jobs:
 
     - name: Generate GitHub App Token
       id: generate-token
-      uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+      uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
       with:
         app-id: ${{ secrets.ODH_RELEASE_BOT_APP_ID }}
         private-key: ${{ secrets.ODH_RELEASE_BOT_PRIVATE_KEY }}
@@ -124,14 +124,14 @@ jobs:
           await script({github, core, context})
 
     - name: Create GH release
-      uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe # v2.4.2
+      uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
       with:
         body: ${{ steps.release-notes.outputs.release-notes-body }}
         tag_name: v${{ env.VERSION }}
         prerelease: true
 
     - name: Trigger ODH Konflux Release Onboarder
-      uses: lasith-kg/dispatch-workflow@91345a2a3b705e950978a584446ab59f7e815ae3 # v2.0.0
+      uses: lasith-kg/dispatch-workflow@31e75ec32486f8af8e5b9c3495efc61fad91c58e # v2.0.2
       with:
         dispatch-method: workflow_dispatch
         workflow: odh-konflux-onboarder.yml
